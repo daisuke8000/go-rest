@@ -4,9 +4,9 @@ import (
 	"encoding/json"
 	"encoding/xml"
 	"fmt"
+	"github.com/daisuke8000/go-rest/service"
 	"github.com/gorilla/mux"
 	"net/http"
-	"time"
 )
 
 type Customer struct {
@@ -15,15 +15,18 @@ type Customer struct {
 	Zipcode string `json:"zip_code" xml:"zip"`
 }
 
-func greet(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprint(w, "Hello, world!!!!!!!!!!")
+type CustomerHandlers struct {
+	service service.CustomerService
 }
 
-func getAllCustomers(w http.ResponseWriter, r *http.Request) {
-	customers := []Customer{
-		{Name: "User1", City: "New York", Zipcode: "110075"},
-		{Name: "User2", City: "San Francisco", Zipcode: "110088"},
-	}
+func (ch *CustomerHandlers) getAllCustomers(w http.ResponseWriter, r *http.Request) {
+	//customers := []Customer{
+	//	{Name: "User1", City: "New York", Zipcode: "110075"},
+	//	{Name: "User2", City: "San Francisco", Zipcode: "110088"},
+	//}
+
+	customers, _ := ch.service.GetAllCustomers()
+
 	if r.Header.Get("Content-Type") == "app/xml" {
 		w.Header().Add("Content-Type", "app/xml")
 		xml.NewEncoder(w).Encode(customers)
@@ -42,17 +45,17 @@ func createCustomer(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprint(w, "request post render")
 }
 
-// currentTimeAPI
-func getCurrentTime(w http.ResponseWriter, r *http.Request) {
-	n := time.Now()
-	// request json
-	curtime := struct {
-		RequestTime string `json:"current_time"`
-	}{
-		RequestTime: n.Format(time.RFC3339),
-	}
-	w.Header().Add("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(curtime)
-	// plan
-	//fmt.Fprint(w, n.Format(time.RFC3339))
-}
+//// currentTimeAPI
+//func getCurrentTime(w http.ResponseWriter, r *http.Request) {
+//	n := time.Now()
+//	// request json
+//	curtime := struct {
+//		RequestTime string `json:"current_time"`
+//	}{
+//		RequestTime: n.Format(time.RFC3339),
+//	}
+//	w.Header().Add("Content-Type", "application/json")
+//	json.NewEncoder(w).Encode(curtime)
+//	// plan
+//	//fmt.Fprint(w, n.Format(time.RFC3339))
+//}
