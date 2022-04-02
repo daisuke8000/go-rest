@@ -1,0 +1,6 @@
+.dbdata/
+.devcontainer/
+.idea/dataSources.xml
+.vscode/
+go.mod
+go.sum
