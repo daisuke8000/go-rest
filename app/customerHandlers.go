@@ -13,12 +13,9 @@ type CustomerHandlers struct {
 }
 
 func (ch *CustomerHandlers) getAllCustomers(w http.ResponseWriter, r *http.Request) {
-	//customers := []Customer{
-	//	{Name: "User1", City: "New York", Zipcode: "110075"},
-	//	{Name: "User2", City: "San Francisco", Zipcode: "110088"},
-	//}
 
-	customers, err := ch.service.GetAllCustomers()
+	status := r.URL.Query().Get("status")
+	customers, err := ch.service.GetAllCustomers(status)
 
 	if err != nil {
 		writeResponse(w, err.Code, err.AsMessage())
